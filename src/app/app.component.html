@@ -1,0 +1,46 @@
+<header>
+  <h1>
+    URL Shortner
+  </h1>
+</header>
+
+<section class="container">
+  <form #urlForm="ngForm" 
+  (ngSubmit)="onSubmitUrlForm(urlForm)" 
+  novalidate autocomplete="off"
+  *ngIf="!isFormSubmitted">
+    <input class="form-input" 
+    name="inputUrl" 
+    #inputUrl="ngModel" 
+    type="url" 
+    [(ngModel)]="model.inputUrl" 
+    placeholder="Paste your url here"/>
+    <div class="form-error" [hidden]="inputUrl.valid || inputUrl.pristine && inputUrl.errors" >
+      <p *ngIf="inputUrl.errors && inputUrl.errors['required']">Please Enter URL</p>
+    </div>
+    <button type="submit" [disabled]="urlForm.invalid" class="form-btn">
+      {{ !isLoading ? 'Generate URL' : 'Generating...'}}
+    </button>
+  </form>
+
+  <div class="short-url-div" *ngIf="isFormSubmitted">
+    <h2>
+      Generated URL
+    </h2>
+    <div>
+      <p>
+        <a [href]="shortUrl" #shortUrlElementRef target="_blank" title="Click Me">{{shortUrl}}</a>
+      </p>
+    </div>
+    <div class="short-url-btn-div">
+      <button (click)="copyUrl(shortUrlElementRef)">{{ !isTextCopied ? 'Copy': 'Copied'}}</button> &nbsp;&nbsp;&nbsp;
+      <button (click)="reset()">Reset</button>
+    </div>
+  </div>
+</section>
+<!--Oauth-->
+<div *ngIf="isLoggedIn()"> 
+  <div class="container">
+    <button class="btn btn-secondary" (click)="logout()">Logout</button>
+  </div>
+</div>
